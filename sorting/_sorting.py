@@ -1,4 +1,5 @@
 import math
+from audioop import reverse
 from operator import ge, le
 from random import randrange
 
@@ -7,7 +8,7 @@ __all__ = ["bubble_sort", "insertion_sort", "selection_sort",
            "merge", "merge_sort", "MaxHeap", "MinHeap", "heap_sort",
            "partition", "quicksort", "randomized_partition",
            "randomized_quicksort", "hoare_partition", "hoare_quicksort",
-           "counting_sort"]
+           "counting_sort", "radix_sort"]
 
 
 # TODO: quicksort always using modified_tail_recursive_quicksort
@@ -353,7 +354,7 @@ def quicksort(A, p, r, reverse=False):
 
     Examples
     --------
-    A simple application of the quicksort algorithm is:
+        A simple application of the quicksort algorithm is:
 
     >>> A = [5, 2, 4, 7, 1, 3, 2, 6]
     >>> quicksort(A, 0, 7)
@@ -1558,9 +1559,6 @@ def counting_sort(A, B, k, reverse=False):
         A permutation (reordering) of the input sequence (a1', a2', ..., an') such that
         a1' <= a2', ..., <= an'.
 
-    reverse : bool, default False
-        The reverse flag can be set to sort in descending order.
-
     References
     ----------
     .. [1] Cormen, T.H., Leiserson, C.E., Rivest, R.L., Stein, C., 2009. Introduction
@@ -1608,34 +1606,22 @@ def counting_sort(A, B, k, reverse=False):
         C[A[j]] -= 1
 
 
-def radix_sort(A, d):
+def radix_sort(A):
     """
     COUNTING-SORT algorithm.
 
+    # TODO: reverse option. Order is wrong
     Parameters
     ----------
     A : ndarray, shape (n,)
         A sequence of n numbers (a1, a2, ..., an),
         where ``n`` is the number of elements in the sequence.
 
-    B : ndarray, shape (n,)
-        The array B[1..n] holds the sorted output.
-
-    k : int
-        Each of the n input elements is an integer in the range 0 to k.
-        Range of A.
-
-    reverse : bool, default False
-        The reverse flag can be set to sort in descending order.
-
     Returns
     -------
     B : ndarray, shape (n,)
         A permutation (reordering) of the input sequence (a1', a2', ..., an') such that
         a1' <= a2', ..., <= an'.
-
-    reverse : bool, default False
-        The reverse flag can be set to sort in descending order.
 
     References
     ----------
@@ -1644,49 +1630,60 @@ def radix_sort(A, d):
 
     Examples
     --------
-    A simple application of the counting sort algorithm is:
+    A simple application of the radix sort algorithm is:
 
     >>> A = [329, 457, 657, 839, 436, 720, 355]
-    >>> B = [None] * len(A)
-    >>> counting_sort(A, B, max(A))
+    >>> B = radix_sort(A)
     >>> B
-    [0, 0, 2, 2, 3, 3, 3, 5]
+    [329, 355, 436, 457, 657, 720, 839]
 
-    Another example from CLRS exercises 8.2-1
+    Another example from CLRS Instructor Manual
 
-    >>> A = [6, 0, 2, 0, 1, 3, 4, 6, 1, 3, 2]
-    >>> B = [None] * len(A)
-    >>> counting_sort(A, B, max(A))
+    >>> A = [326, 453, 608, 835, 751, 435, 704, 690]
+    >>> B = radix_sort(A)
     >>> B
-    [0, 0, 1, 1, 2, 2, 3, 3, 4, 6, 6]
+    [326, 435, 453, 608, 690, 704, 751, 835]
 
-    Sort in descending order:
-    >>> A = [2, 5, 3, 0, 2, 3, 0, 3]
-    >>> B = [None] * len(A)
-    >>> counting_sort(A, B, max(A), reverse=True)
+    Another example with nonuniform digits numbers
+
+    >>> A = [123, 24, 345, 6, 567, 678, 76, 44,
+             357, 10, 234, 555, 767, 1, 15]
+    >>> B = radix_sort(A)
     >>> B
-    [5, 3, 3, 3, 2, 2, 0, 0]
+    [1, 6, 10, 15, 24, 44, 76, 123, 234, 345, 357, 555, 567, 678, 767]
 
     """
-    B = [None] * len(A)
-    for i in range(d):
-        counting_sort(A, B, 9)
+    max_ = max(A)
 
-
-def radix_sort(A, B, b, r):
-
-    n = len(A)
-    for k in range(b // r):
-        C = [0] * (1 << r)
-        for j in range(n):
-            binary = (A[j] >> r * k) & ((1 << r) - 1)
-            C[binary] += 1
-        for i in range(1, 1 << r):
-            C[i] += C[i - 1]
-        for j in range(n - 1, -1, -1):
-            binary = (A[j] >> r * k) & ((1 << r) - 1)
-            C[binary] -= 1
-            B[C[binary]] = A[j]
-        A = B
+    # use a stable sort to sort array A on digit i
+    exp = 1
+    while max_ // exp > 0:
+        B = [None] * len(A)
+        _counting_sort(A, B, exp)
+        A, B = B, A
+        exp *= 10
+        # print(A)
     return B
+
+
+def _counting_sort(A, B, exp):
+    """
+    COUNTING-SORT algorithm for radix sort subroutine.
+
+    The stable sort used as the intermediate sorting algorithm.
+    """
+    n = len(A)
+    C = [0] * 10
+    for j in range(n):
+        C[(A[j] // exp) % 10] += 1
+    # C[i] now contains the number of elements equal to i.
+    for i in range(1, 10):
+        C[i] += C[i - 1]
+    # C[i] now contains the number of elements less than or equal to i.
+    for j in range(n-1, -1, -1):
+        # if reverse:
+        #     B[n - C[(A[j] // exp) % 10]] = A[j]
+        # else:
+        B[C[(A[j] // exp) % 10] - 1] = A[j]
+        C[(A[j] // exp) % 10] -= 1
 
