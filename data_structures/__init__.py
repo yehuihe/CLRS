@@ -6,7 +6,9 @@ Sorting (:mod:`CLRS.data_structures`)
 """
 
 from ._stack import *
-# from ._eigen import *
+from ._queue import *
+from ._heap import *
+from ._priority_queue import *
 # from ._qr_factorization import *
 # from ._iterative import *
 
