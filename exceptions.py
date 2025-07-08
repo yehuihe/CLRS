@@ -7,6 +7,7 @@ __all__ = [
     "QueueUnderflowError",
     "QueueOverflowError",
     "HeapUnderflowError",
+    "HashTableOverflowError",
 ]
 
 
@@ -75,3 +76,17 @@ class HeapUnderflowError(Exception):
     # TODO: add examples
 
     """
+
+
+class HashTableOverflowError(Exception):
+    """Exception class to raise if the HashTable underflow.
+
+    This class inherits from both Exception to help with
+    exception handling and backward compatibility.
+
+    Examples
+    --------
+    # TODO: add examples
+
+    """
+
