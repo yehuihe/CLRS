@@ -1,6 +1,6 @@
 
 from abc import ABCMeta, abstractmethod
-from collections import MutableMapping
+from collections.abc import MutableMapping
 
 from ._linked_list import DoublyLinkedList
 # from ..utils import (

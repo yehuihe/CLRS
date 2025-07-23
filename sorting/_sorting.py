@@ -2,13 +2,13 @@ import math
 from operator import ge, le
 from random import randrange
 # from ..data_structures import MaxHeap
-from data_structures import MaxHeap
+from data_structures import MaxHeap, BinarySearchTree
 
 __all__ = ["bubble_sort", "insertion_sort", "selection_sort",
            "merge", "merge_sort", "heap_sort",
            "partition", "quicksort", "randomized_partition",
            "randomized_quicksort", "hoare_partition", "hoare_quicksort",
-           "counting_sort", "radix_sort"]
+           "counting_sort", "radix_sort", "tree_sort"]
 
 
 # TODO: quicksort always using modified_tail_recursive_quicksort
@@ -713,3 +713,42 @@ def _counting_sort(A, B, exp):
         # else:
         B[C[(A[j] // exp) % 10] - 1] = A[j]
         C[(A[j] // exp) % 10] -= 1
+
+
+def tree_sort(A):
+    """
+    Tree-Sort algorithm based on binary search tree.
+
+    Parameters
+    ----------
+    A : ndarray, shape (n,)
+        A sequence of n numbers (a1, a2, ..., an),
+        where ``n`` is the number of elements in the sequence.
+
+    Returns
+    -------
+    A : ndarray, shape (n,)
+        A permutation (reordering) of the input sequence (a1', a2', ..., an') such that
+        a1' <= a2', ..., <= an'.
+
+    References
+    ----------
+    .. [1] Cormen, T.H., Leiserson, C.E., Rivest, R.L., Stein, C., 2009. Introduction
+        to Algorithms, Third Edition. 3rd ed., The MIT Press.
+
+    Examples
+    --------
+    A simple application of the insertion sort algorithm is:
+
+    >>> A = [5, 2, 4, 7, 1, 3, 2, 6]
+    >>> tree_sort(A)
+    >>> A
+    [1, 2, 2, 3, 4, 5, 6, 7]
+
+    """
+    bst = BinarySearchTree()
+    for i in range(len(A)):
+        bst.tree_insert(BinarySearchTree.Node(A[i]))
+    tree_walk = BinarySearchTree.inorder_tree_walk(bst.root)
+    for i in range(len(A)):
+        A[i] = next(tree_walk)

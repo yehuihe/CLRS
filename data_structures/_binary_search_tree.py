@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from collections import MutableMapping
+from collections.abc import MutableMapping
 
 from data_structures import Stack
 from utils import ReadOnly
@@ -255,6 +255,7 @@ class BinaryTree(Tree, metaclass=ABCMeta):
         """Return the total number of nodes in the tree"""
         return self._n
 
+    @staticmethod
     def n_children(x):
         """
         Number of children node x has.
@@ -317,9 +318,9 @@ class BinaryTree(Tree, metaclass=ABCMeta):
             Yields children of node x.
 
         """
-        if not x.left:
+        if x.left:
             yield x.left
-        if not x.right:
+        if x.right:
             yield x.right
 
     @staticmethod
@@ -563,8 +564,36 @@ class BinarySearchTree(BinaryTree, MutableMapping):
     >>> pred
     BinarySearchTree.Node(key=9, address=0x2c2bf3e8ac0)
 
+    Children of the node 15
+
+    >>> children = BST.children(BST.root)
+    >>> next(children)
+    BinaryTree.Node(key=6, address=0x105cc5f80)
+    >>> next(children)
+    BinaryTree.Node(key=18, address=0x105cc5c40)
+
+    Number of children of node with key 18
+
+    >>> x = BinarySearchTree.tree_search(BST.root, 18)
+    >>> BinarySearchTree.n_children(x)
+    2
 
     """
+
+    def __init__(self):
+        super().__init__()
+
+    def __getitem__(self, key):
+        return self.tree_search(self._root, key)
+
+    def __setitem__(self, key, value):
+        raise NotImplementedError("__setitem__ is not implemented for BinarySearchTree.")
+
+    def __delitem__(self, key):
+        z = self.tree_search(self._root, key)
+        if z:
+            self.tree_delete(z)
+
     # root = ReadOnly()
     #
     # class Node:
@@ -621,8 +650,6 @@ class BinarySearchTree(BinaryTree, MutableMapping):
     #         """Return True if other does not represent the same Node"""
     #         return not (self == other)
 
-    def __init__(self):
-        super().__init__()
 
     # def node(self, k):
     #     """
@@ -983,12 +1010,13 @@ class BinarySearchTree(BinaryTree, MutableMapping):
             y.left = z
         else:
             y.right = z
+        self._n += 1
 
     def transplant(self, u, v):
         """
         Subroutine TRANSPLANT
         
-        hich replaces one subtree as a child of its
+        Which replaces one subtree as a child of its
         parent with another subtree.
 
         Parameters
@@ -1013,6 +1041,8 @@ class BinarySearchTree(BinaryTree, MutableMapping):
         """
         Deleting a node z from a binary search tree T.
 
+        # TODO: implement self._n size change.
+
         Parameters
         ----------
         z : BinarySearchTree.Node
@@ -1032,7 +1062,3 @@ class BinarySearchTree(BinaryTree, MutableMapping):
             self.transplant(z, y)
             y.left = z.left
             y.left.p = y
-
-    def tree_sort(self, A):
-        pass
-
