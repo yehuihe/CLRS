@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod, ABC
+from abc import ABCMeta, abstractmethod
 
 # from ..utils import (
 #     ReadOnly,
@@ -14,7 +14,7 @@ __all__ = ["SinglyLinkedList",
 
 
 class BaseLinkedList(metaclass=ABCMeta):
-    """Base class for all linked lists in scikit-learn."""
+    """Base class for all linked lists in CLRS."""
 
     @abstractmethod
     def __init__(self):

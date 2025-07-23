@@ -1,5 +1,6 @@
 
 from abc import ABCMeta, abstractmethod
+from collections import MutableMapping
 
 from ._linked_list import DoublyLinkedList
 # from ..utils import (
@@ -312,7 +313,7 @@ class BitVector:
         self._B[k] = 0
 
 
-class BaseHashTable(metaclass=ABCMeta):
+class BaseHashTable(MutableMapping, metaclass=ABCMeta):
     """Base class for hash tables."""
 
     T = ReadOnly()
@@ -328,18 +329,6 @@ class BaseHashTable(metaclass=ABCMeta):
 
     def __len__(self):
         return self._n
-
-    @abstractmethod
-    def __getitem__(self, key):
-        pass
-
-    @abstractmethod
-    def __setitem__(self, key, value):
-        pass
-
-    @abstractmethod
-    def __delitem__(self, key):
-        pass
 
 
 class HashTable(BaseHashTable):
@@ -451,6 +440,9 @@ class HashTable(BaseHashTable):
             raise KeyError(f"Key Error: {key} not found.")
         else:
             self.chained_hash_delete(x)
+
+    def __iter__(self):
+        raise NotImplementedError("__iter__ is not implemented for HashTable type.")
 
     def chained_hash_search(self, k):
         """
@@ -733,5 +725,6 @@ class OpenAddressingHashTable(BaseHashTable):
         -------
 
         """
+        raise NotImplementedError("Iteration not implemented.")
 
 
