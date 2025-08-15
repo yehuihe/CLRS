@@ -9,13 +9,13 @@ class Tree(MutableMapping, metaclass=ABCMeta):
     """Base class for all trees in CLRS."""
 
     root = ReadOnly()
+    _NIL = None
 
     def __init__(self):
-        self._root = None
+        self._root = self._NIL
 
-    @staticmethod
     @abstractmethod
-    def n_children(x):
+    def n_children(self, x):
         """
         Number of children node x has.
 
@@ -32,17 +32,15 @@ class Tree(MutableMapping, metaclass=ABCMeta):
         """
         ...
 
-    @staticmethod
     @abstractmethod
-    def children(x):
+    def children(self, x):
         ...
 
     @abstractmethod
     def __len__(self):
         ...
 
-    @staticmethod
-    def isleaf(x):
+    def isleaf(self, x):
         """
         Check if a node is a tree leaf.
 
@@ -57,7 +55,7 @@ class Tree(MutableMapping, metaclass=ABCMeta):
             Returns True if node is a leaf.
 
         """
-        return Tree.n_children(x) == 0
+        return self.n_children(x) == 0
 
     def isroot(self, x):
         """
@@ -106,7 +104,7 @@ class Tree(MutableMapping, metaclass=ABCMeta):
         if self.isroot(x):
             return 0
         else:
-            return 1 + self.depth(self.parent(x))
+            return 1 + self.depth(x.p)
 
     def _height(self, x):
         if self.isleaf(x):
@@ -131,17 +129,16 @@ class Tree(MutableMapping, metaclass=ABCMeta):
             Returns height of the subtree rooted at x.
 
         """
-        if not x:
+        if x is None:
             x = self._root
         return self._height(x)
 
-    @staticmethod
-    def preorder_tree_walk(x):
+    def preorder_tree_walk(self, x=None):
         """Preorder tree walk recursive procedure
 
         Parameters
         ----------
-        x : Tree.Node
+        x : Tree.Node, default None
             Given node x.
 
         Yields
@@ -150,13 +147,15 @@ class Tree(MutableMapping, metaclass=ABCMeta):
             Yields the root before the values in either subtree.
 
         """
-        if x:
-            yield x.key
-            yield from Tree.preorder_tree_walk(x.left)
-            yield from Tree.preorder_tree_walk(x.right)
+        if x is None:
+            x = self._root
 
-    @staticmethod
-    def postorder_tree_walk(x):
+        if not x.isnil():
+            yield x.key
+            yield from self.preorder_tree_walk(x.left)
+            yield from self.preorder_tree_walk(x.right)
+
+    def postorder_tree_walk(self, x=None):
         """Postorder tree walk recursive procedure
 
         Parameters
@@ -170,9 +169,12 @@ class Tree(MutableMapping, metaclass=ABCMeta):
             Yields the root after the values in its subtrees.
 
         """
-        if x:
-            yield from Tree.postorder_tree_walk(x.left)
-            yield from Tree.postorder_tree_walk(x.right)
+        if x is None:
+            x = self._root
+
+        if not x.isnil():
+            yield from self.postorder_tree_walk(x.left)
+            yield from self.postorder_tree_walk(x.right)
             yield x.key
 
     # def tree_walk(self, order="preorder"):
@@ -182,7 +184,7 @@ class Tree(MutableMapping, metaclass=ABCMeta):
     #         return self.postorder_tree_walk(self._root)
 
     def __iter__(self):
-        yield from self.preorder_tree_walk(self._root)
+        yield from self.preorder_tree_walk()
 
 
 class BinaryTree(Tree, metaclass=ABCMeta):
@@ -231,11 +233,11 @@ class BinaryTree(Tree, metaclass=ABCMeta):
             self.right = right
             self.p = p
 
+        def isnil(self):
+            return False
+
         def __repr__(self):
             return (f"{self.__class__.__qualname__}(key={self.key}, "
-                    # f"left={self.left}, "
-                    # f"right={self.right}, "
-                    # f"p={self.p}), "
                     f"address={hex(id(self))})")
 
         def __eq__(self, other):
@@ -245,6 +247,35 @@ class BinaryTree(Tree, metaclass=ABCMeta):
             """Return True if other does not represent the same Node"""
             return not (self == other)
 
+    class NIL:
+        """
+        The sentinel node of a binary tree T
+
+        Attributes
+        ----------
+        left : object, default: None
+            The left child of this node.
+
+        right : object, default: None
+            The right child of this node.
+
+        p : object, default: None
+            The parent of this node.
+        """
+        __slots__ = ["left", "right", "p"]
+
+        def __init__(self):
+            self.left = self
+            self.right = self
+            self.p = self
+
+        def isnil(self):
+            return True
+
+        def __repr__(self):
+            return (f"{self.__class__.__qualname__} "
+                    f"address={hex(id(self))})")
+
     def __init__(self):
         super().__init__()
         self._n = 0
@@ -253,8 +284,7 @@ class BinaryTree(Tree, metaclass=ABCMeta):
         """Return the total number of nodes in the tree"""
         return self._n
 
-    @staticmethod
-    def n_children(x):
+    def n_children(self, x):
         """
         Number of children node x has.
 
@@ -270,14 +300,13 @@ class BinaryTree(Tree, metaclass=ABCMeta):
 
         """
         children = 0
-        if x.left:
+        if not x.left.isnil():
             children += 1
-        if x.right:
+        if not x.right.isnil():
             children += 1
         return children
 
-    @staticmethod
-    def sibling(x):
+    def sibling(self, x):
         """
         Return siblings of node x.
 
@@ -292,16 +321,15 @@ class BinaryTree(Tree, metaclass=ABCMeta):
             Number of children.
 
         """
-        if not x.p:  # Tree T was empty.
+        if x.p.isnil():  # Tree T was empty.
             return None
         else:
-            if x == x.p.left:
+            if x is x.p.left:
                 return x.p.right
             else:
                 return x.p.left
 
-    @staticmethod
-    def children(x):
+    def children(self, x):
         """
         Generate children of node x.
 
@@ -316,13 +344,12 @@ class BinaryTree(Tree, metaclass=ABCMeta):
             Yields children of node x.
 
         """
-        if x.left:
+        if not x.left.isnil():
             yield x.left
-        if x.right:
+        if not x.right.isnil():
             yield x.right
 
-    @staticmethod
-    def inorder_tree_walk(x):
+    def inorder_tree_walk(self, x=None):
         """Inorder tree walk recursive procedure
 
         Parameters
@@ -337,16 +364,18 @@ class BinaryTree(Tree, metaclass=ABCMeta):
             and yielding those in its right subtree.
 
         """
-        if x:
-            yield from BinaryTree.inorder_tree_walk(x.left)
-            yield x.key
-            yield from BinaryTree.inorder_tree_walk(x.right)
+        if x is None:
+            x = self._root
 
-    @staticmethod
-    def iterative_inorder_tree_walk(x):
+        if not x.isnil():
+            yield from self.inorder_tree_walk(x.left)
+            yield x.key
+            yield from self.inorder_tree_walk(x.right)
+
+    def iterative_inorder_tree_walk(self, x=None):
         """Inorder tree walk iterative procedure
 
-        # TODO: order is still wrong
+        # TODO: order is still wrong. Fix this
         It yields the key of the root of a subtree
         between yielding the values in its left subtree
         and yielding those in its right subtree.
@@ -373,4 +402,4 @@ class BinaryTree(Tree, metaclass=ABCMeta):
                 s.push(z.left)
 
     def __iter__(self):
-        yield from self.inorder_tree_walk(self._root)
+        return self.inorder_tree_walk()

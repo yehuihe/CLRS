@@ -20,28 +20,29 @@ class BinarySearchTree(BinaryTree):
 
     # TODO: Tell user how to create a tree with correct insertion order.
 
-    >>> BST = BinarySearchTree()
-    >>> x12 = BinarySearchTree.Node(12)
-    >>> x18 = BinarySearchTree.Node(18)
-    >>> x5 = BinarySearchTree.Node(5)
-    >>> x2 = BinarySearchTree.Node(2)
-    >>> x9 = BinarySearchTree.Node(9)
-    >>> x15 = BinarySearchTree.Node(15)
-    >>> x19 = BinarySearchTree.Node(19)
-    >>> x17 = BinarySearchTree.Node(17)
-    >>> x13 = BinarySearchTree.Node(13)
-    >>> BST.tree_insert(x12)
-    >>> BST.tree_insert(x18)
-    >>> BST.tree_insert(x5)
-    >>> BST.tree_insert(x2)
-    >>> BST.tree_insert(x9)
-    >>> BST.tree_insert(x15)
-    >>> BST.tree_insert(x19)
-    >>> BST.tree_insert(x17)
+    >>> from data_structures.tree import BinarySearchTree
+bst = BinarySearchTree()
+x12 = BinarySearchTree.Node(12)
+x18 = BinarySearchTree.Node(18)
+x5 = BinarySearchTree.Node(5)
+x2 = BinarySearchTree.Node(2)
+x9 = BinarySearchTree.Node(9)
+x15 = BinarySearchTree.Node(15)
+x19 = BinarySearchTree.Node(19)
+x17 = BinarySearchTree.Node(17)
+x13 = BinarySearchTree.Node(13)
+bst.tree_insert(x12)
+bst.tree_insert(x18)
+bst.tree_insert(x5)
+bst.tree_insert(x2)
+bst.tree_insert(x9)
+bst.tree_insert(x15)
+bst.tree_insert(x19)
+bst.tree_insert(x17)
 
     Inserting an item with key 13 into a binary search tree.
 
-    >>> BST.tree_insert(x13)
+    >>> bst.tree_insert(x13)
 
     >>> x15.left
     BinarySearchTree.Node(key=13, address=0x2b01e24d380)
@@ -50,35 +51,36 @@ class BinarySearchTree(BinaryTree):
 
     Deleting an tree node 15
 
-    >>> x = BinarySearchTree.iterative_tree_search(BST.root, 15)
-    >>> BST.tree_delete(x)
-    >>> BinarySearchTree.iterative_tree_search(BST.root, 15)
+    >>> x = bst.iterative_tree_search(15)
+    >>> bst.tree_delete(x)
+    >>> bst.iterative_tree_search(15)
+    <data_structures.tree._binary_search_tree.BinarySearchTree.NIL at 0x103260150>
 
-    >>> x = BinarySearchTree.iterative_tree_search(BST.root, 18)
+    >>> x = bst.iterative_tree_search(18)
     >>> x.left
     BinarySearchTree.Node(key=17, address=0x2c2bf458bc0)
 
     Create a binary search tree as Figure 12.1 in CLSR.
 
-    >>> BST_a = BinarySearchTree()
-    >>> BST_a.tree_insert(BinarySearchTree.Node(6))
-    >>> BST_a.tree_insert(BinarySearchTree.Node(5))
-    >>> BST_a.tree_insert(BinarySearchTree.Node(7))
-    >>> BST_a.tree_insert(BinarySearchTree.Node(2))
-    >>> BST_a.tree_insert(BinarySearchTree.Node(5))
-    >>> BST_a.tree_insert(BinarySearchTree.Node(8))
+    >>> bst_a = BinarySearchTree()
+    >>> bst_a.tree_insert(BinarySearchTree.Node(6))
+    >>> bst_a.tree_insert(BinarySearchTree.Node(5))
+    >>> bst_a.tree_insert(BinarySearchTree.Node(7))
+    >>> bst_a.tree_insert(BinarySearchTree.Node(2))
+    >>> bst_a.tree_insert(BinarySearchTree.Node(5))
+    >>> bst_a.tree_insert(BinarySearchTree.Node(8))
 
-    >>> BST_b = BinarySearchTree()
-    >>> BST_b.tree_insert(BinarySearchTree.Node(2))
-    >>> BST_b.tree_insert(BinarySearchTree.Node(5))
-    >>> BST_b.tree_insert(BinarySearchTree.Node(7))
-    >>> BST_b.tree_insert(BinarySearchTree.Node(6))
-    >>> BST_b.tree_insert(BinarySearchTree.Node(8))
-    >>> BST_b.tree_insert(BinarySearchTree.Node(5))
+    >>> bst_b = BinarySearchTree()
+    >>> bst_b.tree_insert(BinarySearchTree.Node(2))
+    >>> bst_b.tree_insert(BinarySearchTree.Node(5))
+    >>> bst_b.tree_insert(BinarySearchTree.Node(7))
+    >>> bst_b.tree_insert(BinarySearchTree.Node(6))
+    >>> bst_b.tree_insert(BinarySearchTree.Node(8))
+    >>> bst_b.tree_insert(BinarySearchTree.Node(5))
 
     Create a generator for inorder tree walk
 
-    >>> inorder_walk = BinarySearchTree.inorder_tree_walk(BST_a.root)
+    >>> inorder_walk = bst_a.inorder_tree_walk()
     >>> next(inorder_walk)
     2
     >>> next(inorder_walk)
@@ -95,7 +97,7 @@ class BinarySearchTree(BinaryTree):
     Instance of BinarySearchTree is a iterable with inorder tree walk as
     iteration order:
 
-    >>> for k in BST_a:
+    >>> for k in bst_a:
     ...     print(k)
     2
     5
@@ -104,9 +106,17 @@ class BinarySearchTree(BinaryTree):
     7
     8
 
+    Providing a subtree inorder traversal:
+
+    >>> x = bst_a.tree_search(7)
+    >>> for i in bst_a.inorder_tree_walk(x):
+    ...     print(i)
+    7
+    8
+
     Similarly for Figure 12.1 (b)
 
-    >>> inorder_walk = BST_b.inorder_tree_walk(BST_b.root)
+    >>> inorder_walk = bst_b.inorder_tree_walk()
     >>> for k in inorder_walk:
     ...     print(k)
     2
@@ -118,7 +128,7 @@ class BinarySearchTree(BinaryTree):
 
     preorder and postorder tree walk
 
-    >>> preorder_walk = BinarySearchTree.preorder_tree_walk(BST_a.root)
+    >>> preorder_walk = bst_a.preorder_tree_walk()
     >>> for k in preorder_walk:
     ...     print(k)
     6
@@ -128,7 +138,7 @@ class BinarySearchTree(BinaryTree):
     7
     8
 
-    >>> postorder_walk = BinarySearchTree.postorder_tree_walk(BST_a.root)
+    >>> postorder_walk = bst_a.postorder_tree_walk()
     >>> for k in postorder_walk:
     ...     print(k)
     2
@@ -140,58 +150,58 @@ class BinarySearchTree(BinaryTree):
 
     Create a binary search tree as Figure 12.2 in CLSR.
 
-    >>> BST = BinarySearchTree()
-    >>> BST.tree_insert(BinarySearchTree.Node(15))
-    >>> BST.tree_insert(BinarySearchTree.Node(6))
-    >>> BST.tree_insert(BinarySearchTree.Node(18))
-    >>> BST.tree_insert(BinarySearchTree.Node(3))
-    >>> BST.tree_insert(BinarySearchTree.Node(7))
-    >>> BST.tree_insert(BinarySearchTree.Node(17))
-    >>> BST.tree_insert(BinarySearchTree.Node(20))
-    >>> BST.tree_insert(BinarySearchTree.Node(2))
-    >>> BST.tree_insert(BinarySearchTree.Node(4))
-    >>> BST.tree_insert(BinarySearchTree.Node(13))
-    >>> BST.tree_insert(BinarySearchTree.Node(9))
+    >>> bst = BinarySearchTree()
+    >>> bst.tree_insert(BinarySearchTree.Node(15))
+    >>> bst.tree_insert(BinarySearchTree.Node(6))
+    >>> bst.tree_insert(BinarySearchTree.Node(18))
+    >>> bst.tree_insert(BinarySearchTree.Node(3))
+    >>> bst.tree_insert(BinarySearchTree.Node(7))
+    >>> bst.tree_insert(BinarySearchTree.Node(17))
+    >>> bst.tree_insert(BinarySearchTree.Node(20))
+    >>> bst.tree_insert(BinarySearchTree.Node(2))
+    >>> bst.tree_insert(BinarySearchTree.Node(4))
+    >>> bst.tree_insert(BinarySearchTree.Node(13))
+    >>> bst.tree_insert(BinarySearchTree.Node(9))
 
     To search for the key 13 in the tree,
 
-    >>> BST.tree_search(BST.root, 13)
+    >>> bst.tree_search(13)
     BinarySearchTree.Node(key=13, address=0x2c2bf3e8b40)
 
     To find the minimum/maximum key in the tree,
 
-    >>> BinarySearchTree.tree_minimum(BST.root)
+    >>> bst.tree_minimum()
     BinarySearchTree.Node(key=2, address=0x2c2bf3e8500)
-    >>> BinarySearchTree.tree_maximum(BST.root)
+    >>> bst.tree_maximum()
     BinarySearchTree.Node(key=20, address=0x2c2bf3e8080)
 
     Instead of searching min/max from the root, you can search the subtree from any node.
     For example find maximum of subtree starting from node 6,
 
-    >>> x = BinarySearchTree.tree_search(BST.root, 6)
-    >>> BinarySearchTree.tree_maximum(x)
+    >>> x = bst.tree_search(6)
+    >>> bst.tree_maximum(x)
     BinarySearchTree.Node(key=13, address=0x2c2bf3e8b40)
 
     Or to use recursive version,
 
-    >>> BinarySearchTree.recursive_tree_maximum(x)
+    >>> bst.recursive_tree_maximum(x)
     BinarySearchTree.Node(key=13, address=0x2c2bf3e8b40)
 
     The successor of the node with key 13
 
-    >>> x = BinarySearchTree.iterative_tree_search(BST.root, 13)
-    >>> succ = BinarySearchTree.tree_successor(x)
+    >>> x = bst.iterative_tree_search(13)
+    >>> succ = bst.tree_successor(x)
     >>> succ
     BinarySearchTree.Node(key=15, address=0x2c2bf3aea40)
 
     The predecessor of the node with key 13
-    >>> pred = BinarySearchTree.tree_predecessor(x)
+    >>> pred = bst.tree_predecessor(x)
     >>> pred
     BinarySearchTree.Node(key=9, address=0x2c2bf3e8ac0)
 
     Children of the node 15
 
-    >>> children = BST.children(BST.root)
+    >>> children = bst.children(bst.root)
     >>> next(children)
     BinaryTree.Node(key=6, address=0x105cc5f80)
     >>> next(children)
@@ -199,14 +209,25 @@ class BinarySearchTree(BinaryTree):
 
     Number of children of node with key 18
 
-    >>> x = BinarySearchTree.tree_search(BST.root, 18)
-    >>> BinarySearchTree.n_children(x)
+    >>> x = bst.tree_search(18)
+    >>> bst.n_children(x)
     2
 
     """
 
+    class Node(BinaryTree.Node):
+        pass
+
+    class NIL:
+        """Dummy for None-nil compatibility."""
+        def isnil(self):
+            return True
+
+    _NIL = NIL()
+
     def __init__(self):
         super().__init__()
+        self._root = self._NIL
 
     def __getitem__(self, key):
         return self.tree_search(self._root, key)
@@ -219,175 +240,10 @@ class BinarySearchTree(BinaryTree):
         if z:
             self.tree_delete(z)
 
-    # root = ReadOnly()
-    #
-    # class Node:
-    #     """
-    #     The node of a binary search tree T
-    #
-    #     An object in addition to a key and satellite data,
-    #     each node contains attributes left, right, and p that point
-    #      to the nodes corresponding to its left child,
-    #     its right child, and its parent, respectively.
-    #
-    #     Attributes
-    #     ----------
-    #     key : object
-    #         The key of this node.
-    #
-    #     left : object, default: None
-    #         The left child of this node.
-    #
-    #     right : object, default: None
-    #         The right child of this node.
-    #
-    #     p : object, default: None
-    #         The parent of this node.
-    #
-    #     Examples
-    #     --------
-    #     Create an node with key 6:
-    #
-    #     >>> x = BinarySearchTree.Node(6)
-    #     >>> x
-    #     BinarySearchTree.Node(key=6, left=None, right=None, p=None), address=0x1f0f7d8d540)
-    #
-    #     """
-    #     __slots__ = ["key", "left", "right", "p"]
-    #
-    #     def __init__(self, key, left=None, right=None, p=None):
-    #         self.key = key
-    #         self.left = left
-    #         self.right = right
-    #         self.p = p
-    #
-    #     def __repr__(self):
-    #         return (f"{self.__class__.__qualname__}(key={self.key}, "
-    #                 # f"left={self.left}, "
-    #                 # f"right={self.right}, "
-    #                 # f"p={self.p}), "
-    #                 f"address={hex(id(self))})")
-    #
-    #     def __eq__(self, other):
-    #         return other is self
-    #
-    #     def __ne__(self, other):
-    #         """Return True if other does not represent the same Node"""
-    #         return not (self == other)
-
-
-    # def node(self, k):
-    #     """
-    #     Generate a node with key k.
-    #
-    #     Parameters
-    #     ----------
-    #     k : int
-    #         The node with key k.
-    #
-    #     Returns
-    #     -------
-    #     element : BinarySearchTree.Node
-    #         The node with key k.
-    #     """
-    #     return self.__class__.Node(k)
-
     def __iter__(self):
-        yield from (k for k in self.inorder_tree_walk(self._root))
+        yield from (k for k in self.inorder_tree_walk())
 
-    # @staticmethod
-    # def inorder_tree_walk(x):
-    #     """Inorder tree walk recursive procedure
-    #
-    #     Parameters
-    #     ----------
-    #     x : BinarySearchTree.Node
-    #         Given node x.
-    #
-    #     Yields
-    #     ------
-    #     inorder_walk : int
-    #          The key of the root of a subtree between yielding the values in its left subtree
-    #         and yielding those in its right subtree.
-    #
-    #     """
-    #     if x:
-    #         yield from BinarySearchTree.inorder_tree_walk(x.left)
-    #         yield x.key
-    #         yield from BinarySearchTree.inorder_tree_walk(x.right)
-    #
-    # @staticmethod
-    # def iterative_inorder_tree_walk(x):
-    #     """Inorder tree walk iterative procedure
-    #
-    #     # TODO: order is still wrong
-    #     It yields the key of the root of a subtree
-    #     between yielding the values in its left subtree
-    #     and yielding those in its right subtree.
-    #
-    #     Parameters
-    #     ----------
-    #     x : BinarySearchTree.Node
-    #         Given node x.
-    #
-    #     Yields
-    #     ------
-    #     inorder_walk : int
-    #          The key of the root of a subtree between yielding the values in its left subtree
-    #         and yielding those in its right subtree.
-    #
-    #     """
-    #     s = Stack(20)
-    #     s.push(x)
-    #     while not s.stack_empty():
-    #         z = s.pop()
-    #         if z:
-    #             yield z.key
-    #             s.push(z.right)
-    #             s.push(z.left)
-    #
-    # @staticmethod
-    # def preorder_tree_walk(x):
-    #     """Preorder tree walk recursive procedure
-    #
-    #     Parameters
-    #     ----------
-    #     x : BinarySearchTree.Node
-    #         Given node x.
-    #
-    #     Yields
-    #     ------
-    #     preorder_walk : int
-    #         Yields the root before the values in either subtree.
-    #
-    #     """
-    #     if x:
-    #         yield x.key
-    #         yield from BinarySearchTree.preorder_tree_walk(x.left)
-    #         yield from BinarySearchTree.preorder_tree_walk(x.right)
-    #
-    # @staticmethod
-    # def postorder_tree_walk(x):
-    #     """Postorder tree walk recursive procedure
-    #
-    #     Parameters
-    #     ----------
-    #     x : BinarySearchTree.Node
-    #         Given node x.
-    #
-    #     Yields
-    #     ------
-    #     postorder_walk : int
-    #         Yields the root after the values in its subtrees.
-    #
-    #     """
-    #     if x:
-    #         yield from BinarySearchTree.postorder_tree_walk(x.left)
-    #         yield from BinarySearchTree.postorder_tree_walk(x.right)
-    #         yield x.key
-
-    @staticmethod
-    def tree_search(x, k):
+    def tree_search(self, k, x=None):
         """TREE SEARCH recursive procedure.
 
         To search for a node with a given key in a binary search tree.
@@ -398,11 +254,12 @@ class BinarySearchTree(BinaryTree):
 
         Parameters
         ----------
-        x : BinarySearchTree.Node
-            Given node x.
-
         k : int
             The key k to search.
+
+        x : BinarySearchTree.Node, default=None
+            Given node x. If not provided, it will default to
+            starting the root of the entire tree.
 
         Returns
         -------
@@ -411,15 +268,17 @@ class BinarySearchTree(BinaryTree):
             otherwise, it returns None.
 
         """
-        if x is None or k == x.key:
+        if x is None:
+            x = self._root
+
+        if x.isnil() or k == x.key:
             return x
         if k < x.key:
-            return BinarySearchTree.tree_search(x.left, k)
+            return self.tree_search(k, x.left)
         else:
-            return BinarySearchTree.tree_search(x.right, k)
+            return self.tree_search(k, x.right)
 
-    @staticmethod
-    def iterative_tree_search(x, k):
+    def iterative_tree_search(self, k, x=None):
         """TREE SEARCH iterative procedure
 
         To search for a node with a given key in a binary search tree.
@@ -430,11 +289,12 @@ class BinarySearchTree(BinaryTree):
 
         Parameters
         ----------
-        x : BinarySearchTree.Node
-            Given node x.
-
         k : int
             The key k to search.
+
+        x : BinarySearchTree.Node, default=None
+            Given node x. If not provided, it will default to
+            starting the root of the entire tree.
 
         Returns
         -------
@@ -443,22 +303,25 @@ class BinarySearchTree(BinaryTree):
             otherwise, it returns None.
 
         """
-        while x is not None and k != x.key:
+        if x is None:
+            x = self._root
+
+        while not x.isnil() and k != x.key:
             if k < x.key:
                 x = x.left
             else:
                 x = x.right
         return x
 
-    @staticmethod
-    def tree_minimum(x):
+    def tree_minimum(self, x=None):
         """
         TREE MINIMUM iterative procedure
 
         Parameters
         ----------
-        x : BinarySearchTree.Node
-            Given node x.
+        x : BinarySearchTree.Node, default=None
+            Given node x. If not provided, it will default to
+            starting the root of the entire tree.
 
         Returns
         -------
@@ -467,19 +330,22 @@ class BinarySearchTree(BinaryTree):
             in the subtree rooted at a given node x.
 
         """
-        while x.left is not None:
+        if x is None:
+            x = self._root
+
+        while not x.left.isnil():
             x = x.left
         return x
 
-    @staticmethod
-    def tree_maximum(x):
+    def tree_maximum(self, x=None):
         """
         TREE MAXIMUM iterative procedure
 
         Parameters
         ----------
-        x : BinarySearchTree.Node
-            Given node x.
+        x : BinarySearchTree.Node, default=None
+            Given node x. If not provided, it will default to
+            starting the root of the entire tree.
 
         Returns
         -------
@@ -488,19 +354,22 @@ class BinarySearchTree(BinaryTree):
             the subtree rooted at a given node x.
 
         """
-        while x.right is not None:
+        if x is None:
+            x = self._root
+
+        while not x.right.isnil():
             x = x.right
         return x
 
-    @staticmethod
-    def recursive_tree_minimum(x):
+    def recursive_tree_minimum(self, x=None):
         """
         TREE MINIMUM recursive procedure
 
         Parameters
         ----------
-        x : BinarySearchTree.Node
-            Given node x.
+        x : BinarySearchTree.Node, default=None
+            Given node x. If not provided, it will default to
+            starting the root of the entire tree.
 
         Returns
         -------
@@ -513,13 +382,15 @@ class BinarySearchTree(BinaryTree):
         CLRS Exercises 12.2-2.
 
         """
-        if x.left is not None:
-            return BinarySearchTree.recursive_tree_minimum(x.left)
+        if x is None:
+            x = self._root
+
+        if not x.left.isnil():
+            return self.recursive_tree_minimum(x.left)
         else:
             return x
 
-    @staticmethod
-    def recursive_tree_maximum(x):
+    def recursive_tree_maximum(self, x=None):
         """
         TREE MAXIMUM recursive procedure
 
@@ -528,8 +399,9 @@ class BinarySearchTree(BinaryTree):
 
         Parameters
         ----------
-        x : BinarySearchTree.Node
-            Given node x.
+        x : BinarySearchTree.Node, default=None
+            Given node x. If not provided, it will default to
+            starting the root of the entire tree.
 
         Returns
         -------
@@ -542,13 +414,15 @@ class BinarySearchTree(BinaryTree):
         CLRS Exercises 12.2-2.
 
         """
-        if x.right is not None:
-            return BinarySearchTree.recursive_tree_maximum(x.right)
+        if x is None:
+            x = self._root
+
+        if not x.right.isnil():
+            return self.recursive_tree_maximum(x.right)
         else:
             return x
 
-    @staticmethod
-    def tree_successor(x):
+    def tree_successor(self, x):
         """TREE SUCCESSOR procedure
 
         Find its successor in the sorted order
@@ -568,16 +442,15 @@ class BinarySearchTree(BinaryTree):
             in the subtree rooted at a given node x.
 
         """
-        if x.right:
-            return BinarySearchTree.tree_minimum(x.right)
+        if not x.right.isnil():
+            return self.tree_minimum(x.right)
         y = x.p
-        while y is not None and x == y.right:
+        while not y.isnil() and x is y.right:
             x = y
             y = y.p
         return y
 
-    @staticmethod
-    def tree_predecessor(x):
+    def tree_predecessor(self, x):
         """TREE PREDECESSOR procedure
 
         Find its predecessor in the sorted order
@@ -597,10 +470,10 @@ class BinarySearchTree(BinaryTree):
             in the subtree rooted at a given node x.
 
         """
-        if x.left:
-            return BinarySearchTree.tree_maximum(x.left)
+        if not x.left.isnil():
+            return self.tree_maximum(x.left)
         y = x.p
-        while y is not None and x == y.left:
+        while not y.isnil() and x is y.left:
             x = y
             y = y.p
         return y
@@ -620,16 +493,19 @@ class BinarySearchTree(BinaryTree):
             The node z to insert.
 
         """
-        y = None
+        y = self._NIL
         x = self._root
-        while x is not None:
+        while not x.isnil():
             y = x
             if z.key < x.key:
                 x = x.left
             else:
                 x = x.right
         z.p = y
-        if y is None:
+        # set children to sentinel
+        z.left = self._NIL
+        z.right = self._NIL
+        if y.isnil():
             self._root = z  # tree T was empty
         elif z.key < y.key:
             y.left = z
@@ -653,13 +529,13 @@ class BinarySearchTree(BinaryTree):
             The subtree rooted at node v.
 
         """
-        if u.p is None:
+        if u.p.isnil():
             self._root = v
-        elif u == u.p.left:
+        elif u is u.p.left:
             u.p.left = v
         else:
             u.p.right = v
-        if v is not None:
+        if not v.isnil():
             v.p = u.p
 
     def tree_delete(self, z):
@@ -674,9 +550,9 @@ class BinarySearchTree(BinaryTree):
             The node z to delete.
 
         """
-        if z.left is None:
+        if z.left.isnil():
             self.transplant(z, z.right)
-        elif z.right is None:
+        elif z.right.isnil():
             self.transplant(z, z.left)
         else:
             y = self.tree_minimum(z.right)
