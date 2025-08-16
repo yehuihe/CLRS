@@ -82,10 +82,6 @@ class RedBlackTree(BalanceSearchTree):
     --------
     A simple application of the RedBlackTree data structure is:
 
-    Create a red black tree as Figure 13.3 in CLSR.
-
-    >>> from data_structures.tree import Color, RedBlackTree
-
     Create a red black tree as Figure 13.4 in CLSR.
 
     # TODO: Tell user how to create a tree with correct insertion order.
@@ -105,23 +101,71 @@ rbt.rb_insert(RedBlackTree.Node(8, color=Color.RED))
 
     >>> rbt.rb_insert(RedBlackTree.Node(4, color=Color.RED))
 
+    We can verify the correct insertion by a preorder traversal:
 
+    >>> for node in rbt.preorder_tree_walk():
+    ...     print(node)
+    RedBlackTree.Node(key=7, address=0x118586150, color=BLACK)
+    RedBlackTree.Node(key=2, address=0x118585f10, color=RED)
+    RedBlackTree.Node(key=1, address=0x118586090, color=BLACK)
+    RedBlackTree.Node(key=5, address=0x118586210, color=BLACK)
+    RedBlackTree.Node(key=4, address=0x1185862d0, color=RED)
+    RedBlackTree.Node(key=11, address=0x118585fd0, color=RED)
+    RedBlackTree.Node(key=8, address=0x118586270, color=BLACK)
+    RedBlackTree.Node(key=14, address=0x1185860f0, color=BLACK)
+    RedBlackTree.Node(key=15, address=0x1185861b0, color=RED)
 
-    Inserting an item with key 13 into a binary search tree.
+    Create a red black tree as Figure 13.1 in CLSR.
 
-    >>> BST.tree_insert(x13)
+    >>> rbt = RedBlackTree()
+rbt.rb_insert(RedBlackTree.Node(26, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(17, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(41, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(14, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(21, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(30, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(47, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(10, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(16, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(19, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(23, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(28, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(38, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(7, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(12, color=Color.BLACK))
+rbt.rb_insert(RedBlackTree.Node(15, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(20, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(35, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(39, color=Color.RED))
+rbt.rb_insert(RedBlackTree.Node(3, color=Color.RED))
 
-    >>> x15.left
-    BinarySearchTree.Node(key=13, address=0x2b01e24d380)
-    >>> x13.p
-    BinarySearchTree.Node(key=15, address=0x2b01e24c500)
+    We can verify the correct insertion by a preorder traversal:
 
-    Deleting an tree node 15
+    >>> for node in rbt.preorder_tree_walk():
+    ...     print(node)
 
-    >>> x = BinarySearchTree.iterative_tree_search(BST.root, 15)
-    >>> BST.tree_delete(x)
-    >>> BinarySearchTree.iterative_tree_search(BST.root, 15)
+    RedBlackTree.Node(key=26, address=0x118584d70, color=BLACK)
+    RedBlackTree.Node(key=17, address=0x118586450, color=RED)
+    RedBlackTree.Node(key=14, address=0x1185863f0, color=BLACK)
+    RedBlackTree.Node(key=10, address=0x1185866f0, color=RED)
+    RedBlackTree.Node(key=7, address=0x1185869f0, color=BLACK)
+    RedBlackTree.Node(key=3, address=0x118586c30, color=RED)
+    RedBlackTree.Node(key=12, address=0x118586a50, color=BLACK)
+    RedBlackTree.Node(key=16, address=0x118586750, color=BLACK)
+    RedBlackTree.Node(key=15, address=0x118586ab0, color=RED)
+    RedBlackTree.Node(key=21, address=0x118586510, color=BLACK)
+    RedBlackTree.Node(key=19, address=0x1185867b0, color=BLACK)
+    RedBlackTree.Node(key=20, address=0x118586b10, color=RED)
+    RedBlackTree.Node(key=23, address=0x118586810, color=BLACK)
+    RedBlackTree.Node(key=41, address=0x118586690, color=BLACK)
+    RedBlackTree.Node(key=30, address=0x1185865d0, color=RED)
+    RedBlackTree.Node(key=28, address=0x1185868d0, color=BLACK)
+    RedBlackTree.Node(key=38, address=0x118586990, color=BLACK)
+    RedBlackTree.Node(key=35, address=0x118586b70, color=RED)
+    RedBlackTree.Node(key=39, address=0x118586bd0, color=RED)
+    RedBlackTree.Node(key=47, address=0x118586630, color=BLACK)
 
+    Rest of operations are identical to BinarySearchTree.
 
     """
 
@@ -465,5 +509,48 @@ rbt.rb_insert(RedBlackTree.Node(8, color=Color.RED))
         self.rb_delete(z)
 
 
+class OrderStatisticTree(RedBlackTree):
 
+    class Node(RedBlackTree.Node):
+        """
+                The node of a red black tree T
 
+                Each node of the tree now contains
+                the attributes color, key, left, right, and p.
+
+                Attributes
+                ----------
+                key : object
+                    The key of this node.
+
+                left : object, default: None
+                    The left child of this node.
+
+                right : object, default: None
+                    The right child of this node.
+
+                p : object, default: None
+                    The parent of this node.
+
+                color : Color, default: RED
+                    The color of this node. Which can be either RED or BLACK.
+
+                Examples
+                --------
+                Create a node with key 6:
+
+                >>> x = RedBlackTree.Node(6)
+                >>> x
+                BinarySearchTree.Node(key=6, left=None, right=None, p=None), address=0x1f0f7d8d540)
+
+                """
+        __slots__ = "size"
+
+        def __init__(self, key, left=None, right=None, p=None, color=Color.RED):
+            super().__init__(key, left, right, p)
+            self.color = color
+
+        def __repr__(self):
+            return (f"{self.__class__.__qualname__}(key={self.key}, "
+                    f"address={hex(id(self))}, "
+                    f"color={self.color.name})")
