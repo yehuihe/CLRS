@@ -151,7 +151,7 @@ class Tree(MutableMapping, metaclass=ABCMeta):
             x = self._root
 
         if not x.isnil():
-            yield x.key
+            yield x
             yield from self.preorder_tree_walk(x.left)
             yield from self.preorder_tree_walk(x.right)
 
@@ -175,7 +175,7 @@ class Tree(MutableMapping, metaclass=ABCMeta):
         if not x.isnil():
             yield from self.postorder_tree_walk(x.left)
             yield from self.postorder_tree_walk(x.right)
-            yield x.key
+            yield x
 
     # def tree_walk(self, order="preorder"):
     #     if order == "preorder":
@@ -369,7 +369,7 @@ class BinaryTree(Tree, metaclass=ABCMeta):
 
         if not x.isnil():
             yield from self.inorder_tree_walk(x.left)
-            yield x.key
+            yield x
             yield from self.inorder_tree_walk(x.right)
 
     def iterative_inorder_tree_walk(self, x=None):
